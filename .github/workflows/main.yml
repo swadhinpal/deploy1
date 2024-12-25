@@ -27,3 +27,13 @@ jobs:
 
     - name: Run tests
       run: npm test
+
+    - name: Deploy to Vercel
+      if: success()  # Ensure deployment only happens if tests pass
+      run: |
+        curl -s https://vercel.com/download -o vercel.tar.gz
+        tar -xvzf vercel.tar.gz
+        ./vercel login ${{ secrets.VERCEL_TOKEN }}  # Login with Vercel token
+        ./vercel --prod --confirm # Deploy to Vercel (use --prod for production deployment)
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
