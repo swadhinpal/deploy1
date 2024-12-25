@@ -1,27 +1,35 @@
 import express from 'express';
 import cors from 'cors'; // Import the CORS middleware
 
-const app = express();
-const port = 3000; // Default to 3000
+const app = express(); // Create the app instance
+const port = process.env.PORT || 3000; // Use the PORT environment variable or default to 3000
+
+// CORS configuration
 const corsOptions = {
     origin: '*',
     credentials: true, // Allow credentials
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
 };
 
+// Apply middleware
 app.use(cors(corsOptions));
-const server = app.listen(port, () => {
-    console.log(`App running on http://localhost:${port}`);
-});
 
+// Define routes
 app.get('/', (req, res) => {
     try {
-        res.send('Hello World');
+        res.send('Hello World'); // Respond with "Hello World"
     } catch (err) {
         console.error("Error handling request:", err);
         res.status(500).send('Something went wrong');
     }
 });
 
-// Export the server for tests
-export default server;
+// Export the app for external usage (e.g., testing or deployment)
+export default app;
+
+// Start the server if not in test mode
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`App running on http://localhost:${port}`);
+    });
+}
