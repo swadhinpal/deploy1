@@ -28,11 +28,18 @@ jobs:
     - name: Run tests
       run: npm test
 
+    # This step ensures tests are run and only proceeds if they pass
+    - name: Check test results
+      run: |
+        if [ $? -ne 0 ]; then
+          echo "Tests failed, aborting deployment";
+          exit 1;
+        fi
+
     - name: Install Vercel CLI
       run: npm install -g vercel
-    
+
     - name: Deploy to Vercel
-      run: vercel --prod --confirm
+      run: vercel --prod --yes
       env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-    
+        VERCEL_TOKEN: ${{ secrets.V }}
