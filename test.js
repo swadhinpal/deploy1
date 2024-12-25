@@ -4,11 +4,6 @@ import assert from 'assert';  // For assertion checks
 
 // No need to create a new server, as the one from app.js is already running
 
-after(() => {
-  // Close the server after tests complete
-  server.close();
-});
-
 describe('GET /', () => {
   it('should return Hello World', async () => {
     const response = await request(server).get('/');
