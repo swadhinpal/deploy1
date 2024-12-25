@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
 // Export the app for external usage (e.g., testing or deployment)
 export default app;
 
-// Start the server if not in test mode
-if (require.main === module) {
+// Start the server if not in test mode (use import.meta.url for ES modules)
+if (import.meta.url === `file://${process.argv[1]}`) {
     app.listen(port, () => {
         console.log(`App running on http://localhost:${port}`);
     });
