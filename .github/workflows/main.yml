@@ -25,8 +25,6 @@ jobs:
         id: run_tests
         run: |
           npm test
-        # Capture the exit code of the test command
-        continue-on-error: true
 
       # Block deployment if tests fail
       - name: Check test result
