@@ -14,28 +14,21 @@ jobs:
         node-version: [22.x] # Specify the Node.js versions to test against
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run tests
-      id: test # Add an ID to refer to this step later
-      run: |
-        npm test
-        if [ $? -ne 0 ]; then
-          echo "Tests failed, aborting deployment."
-          exit 1
-        fi
+      - name: Run tests
+        id: test # Assign an ID for reference
+        run: npm test || exit 1
 
-    - name: Deploy to Vercel
-      if: steps.test.outcome == 'success' # Only runs if the 'test' step succeeds
-      run: vercel --prod --yes --token=${{ secrets.A }}
-      env:
-        H: ${{ secrets.A }}
+      - name: Deploy to Vercel
+        if: ${{ steps.test.outcome == 'success' }} # Ensure deployment only happens if tests succeed
+        run: vercel --prod --yes --token=${{ secrets.A }}
