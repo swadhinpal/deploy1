@@ -42,4 +42,4 @@ jobs:
 
       - name: Deploy to Vercel
         if: ${{ steps.run_tests.outcome == 'success' }}
-        run: vercel --prod --yes --token=${{ secrets.B }}
+        run: vercel --yes --token=${{ secrets.A }}
