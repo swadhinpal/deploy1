@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x] # Specify the Node.js versions to test against
+        node-version: [22.x] # Specify the Node.js version to test against
 
     steps:
       - name: Checkout code
@@ -26,9 +26,20 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        id: test # Assign an ID for reference
-        run: npm test || exit 1
+        id: test # Assign an ID for the test step
+        run: npm test
+
+      # This step prevents deployment until tests are successful
+      - name: Ensure tests passed
+        if: ${{ steps.test.outcome != 'success' }}
+        run: |
+          echo "Tests failed. Blocking deployment."
+          exit 1
+
+      - name: Install Vercel CLI
+        if: ${{ steps.test.outcome == 'success' }} # Only run if tests pass
+        run: npm install -g vercel
 
       - name: Deploy to Vercel
-        if: ${{ steps.test.outcome == 'success' }} # Ensure deployment only happens if tests succeed
+        if: ${{ steps.test.outcome == 'success' }} # Ensure deployment only happens if tests pass
         run: vercel --prod --yes --token=${{ secrets.A }}
