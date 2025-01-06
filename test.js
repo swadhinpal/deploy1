@@ -1,13 +1,12 @@
-import server from './app.js';  // Import the running app and server
-import request from 'supertest';  // For HTTP requests
-import assert from 'assert';  // For assertion checks
+import server from './app.js';  
+import request from 'supertest';  
+import assert from 'assert';  
 
-// No need to create a new server, as the one from app.js is already running
 
 describe('GET /', () => {
   it('should return Hello World', async () => {
     const response = await request(server).get('/');
-    console.log(response.text);  // Optional, to view the response in the console
+    console.log(response.text);  
     assert.strictEqual(response.text, 'Hello World xyz');
   });
 });
