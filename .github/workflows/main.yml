@@ -22,15 +22,20 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        id: run_tests
-        run: |
-          npm test
+        
+        run: npm run test:prod
+    
 
-      # Block deployment if tests fail
-      - name: Check test result
-        run: |
-          if [ ${{ steps.run_tests.outcome }} != "success" ]; then
-            echo "Tests failed, deployment blocked."
-            exit 1
-          fi
+  deploy:
+        needs: [test]
+        runs-on: ubuntu-latest
 
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
+    
+          - name: Install Vercel CLI
+            run: npm install -g vercel
+
+          - name: Deploy to Vercel
+            run: vercel --prod--yes --token=${{ secrets.A }}
