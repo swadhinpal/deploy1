@@ -8,6 +8,6 @@ describe('GET /', () => {
   it('should return Hello World xyz', async () => {
     const response = await request(server).get('/');
     console.log(response.text);  // Optional, to view the response in the console
-    assert.strictEqual(response.text, 'Hello World');
+    assert.strictEqual(response.text, 'Hello World xyz');
   });
 });
