@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 // Define routes
 app.get('/', (req, res) => {
     try {
-        res.send('Hello World Check!'); // Respond with "Hello World"
+        res.send('Hello World fails!'); // Respond with "Hello World"
     } catch (err) {
         console.error("Error handling request:", err);
         res.status(500).send('Something went wrong');

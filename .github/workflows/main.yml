@@ -20,17 +20,22 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }} # Use the matrix version
+        node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
       run: npm ci
 
     - name: Run tests
-      run: npm test
+      id: test # Add an ID to refer to this step later
+      run: |
+        npm test
+        if [ $? -ne 0 ]; then
+          echo "Tests failed, aborting deployment."
+          exit 1
+        fi
 
-    # Deploy only if tests pass
     - name: Deploy to Vercel
-      if: success() # Ensures this step only runs if all previous steps succeed
+      if: steps.test.outcome == 'success' # Only runs if the 'test' step succeeds
       run: vercel --prod --yes --token=${{ secrets.A }}
       env:
         H: ${{ secrets.A }}
