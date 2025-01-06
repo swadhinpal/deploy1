@@ -36,10 +36,3 @@ jobs:
             exit 1
           fi
 
-      - name: Install Vercel CLI
-        if: ${{ steps.run_tests.outcome == 'success' }}
-        run: npm install -g vercel
-
-      - name: Deploy to Vercel
-        if: ${{ steps.run_tests.outcome == 'success' }}
-        run: vercel --yes --token=${{ secrets.A }}
